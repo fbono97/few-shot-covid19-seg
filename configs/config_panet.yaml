@@ -1,0 +1,42 @@
+PATHS:
+  data_path: /content/drive/MyDrive/few-shot-covid19-seg/data/preprocessed_data 
+  data_info_path: /content/drive/MyDrive/few-shot-covid19-seg/data/data_info
+
+  
+DATA_LOADING:
+# Refer to dataloading.datasets.Covid19_Dataset for arguments details
+  preload: True
+  seg_masks_union: False
+  norm_level: 3
+  norm_type: 2
+  repeat_ch: True
+
+  
+MODEL:
+# Refer to models.panet.PANet and models.backbones classes for arguments details
+  model_name: "PANet"
+  backbone_net: "resnet50"
+  pretrained: True
+  extract_blocks: [2, 3]
+  out_ft_size: 256
+  dropout: 0.1
+  prototype_alignment: True
+
+
+TRAINING_TESTING:
+  n_way: 1
+  k_shot: 1
+  n_query: 1
+  batch_size: 1
+  query_chunk_size: 64      # Used in validation/testing to ease GPU memory consumption 
+  max_epoch: 50
+  n_tasks_per_epoch: 1000   # Iterations per epoch
+  print_freq: 200           # Iterations interval for logging
+  save_ckpt_freq: 10        # Epochs interval for model checkpointing 
+  num_workers: 4            # Number of DataLoader workers 
+  base_lr: 0.001            # Initial learning rate
+  momentum: 0.9
+  weight_decay: 0.0005
+  eta_min: 0.000001         # Learning rate at max_epoch in CosineAnnealingLR scheduler
+  bg_weight: 1.0            # Weight assigned to background class in loss function
+  align_loss_weight: 1.0    # Prototype alignment loss weight/contribution in total loss
